@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Generator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="bootstrap-tagsinput.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="styles.css" rel="stylesheet" />
+
+    <!-- quil editor js cdn start-->
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet" />
+    <!-- quil editor js cdn end-->
+  </head>
+
+  <body>
+    <div class="main_outer_wrap">
+      <div class="container-fluid">
+        <div class="blog-generator">
+          <a class="btn btn-primary btn-back" href="/"
+            ><i class="fa fa-solid fa-chevron-left"></i> Back</a
+          >
+          <h2 class="text-center">Blog post Generator</h2>
+          <div class="row">
+            <div class="col-sm-12 col-md-4">
+              <div class="leftColl">
+                <!-- left side form start -->
+                <form onsubmit="event.preventDefault();">
+                  <h5>Pick GPT model version</h5>
+                  <div class="button_box gpt_version_box">
+                    <button class="btn btn-secondary">GPT-4</button>
+                    <button class="btn btn-secondary">GPT-3</button>
+                  </div>
+                  <h5>Block post title</h5>
+                  <div class="form-group">
+                    <input
+                      id="prompt_title"
+                      type="text"
+                      class="form-control"
+                      placeholder="Title of post" />
+                  </div>
+                  <h5>SEO Optimization</h5>
+                  <div class="button_box gpt_version_box">
+                    <button class="btn btn-secondary">Manual</button>
+                    <button class="btn btn-secondary">Ai Generatated</button>
+                  </div>
+                  <div class="form-group manualKeyword">
+                    <label>Related Keywords/Entities/Topics</label>
+                    <input
+                      type="text"
+                      value=""
+                      id="selectedkeyWords"
+                      data-role="tagsinput"
+                      class="form-control"
+                      placeholder="Type keywords" />
+                    <span>Use coma seperat for multiple keywords</span>
+                  </div>
+                  <h5>Tone of Voice</h5>
+                  <div class="form-group select-input-wrap mb-3">
+                    <select class="form-control select-input" id="toneDropdown">
+                      <option value="">Select one</option>
+                      <option value="SEO Optimized (Confident1, ..)">
+                        SEO Optimized (Confident,..)
+                      </option>
+                      <option value="SEO Optimized (Confident2, ..)">
+                        SEO Optimized (Confident2, ..)
+                      </option>
+                    </select>
+                  </div>
+                  <h5>Language</h5>
+                  <div class="form-group select-input-wrap mb-3">
+                    <select
+                      class="form-control select-input"
+                      id="languageDropDown">
+                      <option value="">Select one</option>
+                      <option value="English" id="english">English</option>
+                      <!-- <option value="Bangali" id="bangla">Bangali</option> -->
+                      <!-- <option value="Hindi" id="hindi">Hindi</option> -->
+                    </select>
+                  </div>
+                  <h5>Word count limit</h5>
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="form-group select-input-wrap">
+                      <select
+                        class="form-control select-input"
+                        id="wordCountFromDropDown">
+                        <option value="">Select one</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="400">400</option>
+                        <option value="500">500</option>
+                      </select>
+                    </div>
+                    <div class="to">To</div>
+                    <div class="form-group select-input-wrap">
+                      <select
+                        class="form-control select-input"
+                        id="wordCountToDropDown">
+                        <option value="">Select one</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                        <option value="1000">1000</option>
+                        <option value="1500">1500</option>
+                        <option value="2000">2000</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div
+                    class="d-flex justify-content-evenly align-items-center left-button-buttom">
+                    <button class="btn btn-primary">Reset</button>
+                    <button
+                      id="generate_btn"
+                      type="submit"
+                      class="btn btn-primary"
+                      onclick="generate_prompt()">
+                      Gererate
+                    </button>
+                  </div>
+                </form>
+                <!-- left side form end -->
+              </div>
+            </div>
+            <!-- editor part start-->
+            <div class="col-sm-12 col-md-8">
+              <div class="contentColl">
+                <div class="d-flex justify-content-end align-items-center">
+                  <button class="btn btn-primary">Save Draft</button>
+                  <button class="btn btn-primary" onclick="quilContent()">
+                    Save and publish
+                  </button>
+                </div>
+
+                <div class="mt-2 mb-2">
+                  <b>Flesch grade score:</b>
+                  <span id="flesch" class="countNum">0</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="mt-2 mb-2 post-info-details">
+                    <span class="mr-3">
+                      <b>Characters:</b>
+                      <span id="characters" class="countNum">0</span>
+                    </span>
+                    <span class="mr-3">
+                      <b>Words:</b> <span id="words" class="countNum">0</span>
+                    </span>
+                    <span class="mr-3">
+                      <b>Sentences:</b>
+                      <span id="sentence" class="countNum">0</span>
+                    </span>
+                    <span class="mr-3">
+                      <b>syllables:</b>
+                      <span id="syllable" class="countNum">0</span>
+                    </span>
+                  </div>
+                  <div>
+                    <div class="panel panel-default">
+                      <button
+                        type="button"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Copy"
+                        class="btn btn-default btn-circle btn-xl">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-copy"
+                          viewBox="0 0 16 16">
+                          <path
+                            fill-rule="evenodd"
+                            d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z" />
+                        </svg>
+                      </button>
+                      <button
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="PDF Download"
+                        type="button"
+                        class="btn btn-default btn-circle btn-xl">
+                        <i class="fa fa-solid fa-file-pdf-o"></i>
+                      </button>
+
+                      <button
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="HTML Download"
+                        type="button"
+                        class="btn btn-default btn-circle btn-xl">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-filetype-html"
+                          viewBox="0 0 16 16">
+                          <path
+                            fill-rule="evenodd"
+                            d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5Zm-9.736 7.35v3.999h-.791v-1.714H1.79v1.714H1V11.85h.791v1.626h1.682V11.85h.79Zm2.251.662v3.337h-.794v-3.337H4.588v-.662h3.064v.662H6.515Zm2.176 3.337v-2.66h.038l.952 2.159h.516l.946-2.16h.038v2.661h.715V11.85h-.8l-1.14 2.596H9.93L8.79 11.85h-.805v3.999h.706Zm4.71-.674h1.696v.674H12.61V11.85h.79v3.325Z" />
+                        </svg>
+                      </button>
+                    </div>
+                    <!-- /.panel-body -->
+                  </div>
+                </div>
+              </div>
+              <!-- edit area -->
+              <div class="blog-post-area">
+                <form onsubmit="event.preventDefault();">
+                  <div class="form-group">
+                    <input
+                      id="textTitle"
+                      class="post-title w-100 messageTitle"
+                      placeholder="Title of the post"
+                      readonly />
+                  </div>
+                  <div
+                    id="prompt_message"
+                    class="post-textarea w-100"
+                    placeholder="Type here...."></div>
+                  <!-- editor code end-->
+                </form>
+              </div>
+            </div>
+            <!-- editor part end-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div
+      style="height: 130px; margin-top: 300px"
+      class="modal fade"
+      id="loadingModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-body text-center">...Loading PLease Wait</div>
+      </div>
+    </div>
+
+    <!-- backend part -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <script src="bootstrap-tagsinput.min.js"></script> -->
+    <script src="custom.js"></script>
+    <script src="script.js"></script>
+
+    <!-- for editor js file  -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- Initialize Quill editor -->
+    <script>
+      var quill = new Quill("#prompt_message", {
+        modules: {
+          toolbar: true,
+        },
+        theme: "snow",
+      });
+
+      const quilContent = () => {
+        console.log("first", quill.container.innerHTML);
+      };
+    </script>
+
+    <!-- module type script -->
+    <script type="module">
+      import { fleschKincaid } from "https://esm.sh/flesch-kincaid@2?bundle";
+      import { syllable } from "https://esm.sh/syllable@5?bundle";
+      module.getScore = getScore;
+      function getScore(data) {
+        const flesch = document.getElementById("flesch");
+        const characters = document.getElementById("characters");
+        const words = document.getElementById("words");
+        const Sentences = document.getElementById("sentence");
+        const syllables = document.getElementById("syllable");
+
+        let w = data.replaceAll("\n", " ").split(" ");
+        w = w.filter((i) => i != " " && i != "");
+        console.log("words", w.length);
+
+        let s = data.split("\n");
+        s = s.filter((i) => i != " " && i != "");
+        console.log("sentence", s.length);
+
+        const c = data.replaceAll("\n", "").split("").length;
+        console.log("character", c);
+
+        flesch.innerHTML = fleschKincaid({
+          sentence: s.length,
+          word: w.length,
+          syllable: syllable(data),
+        }).toFixed(2);
+
+        characters.innerHTML = c;
+        words.innerHTML = w.length;
+        Sentences.innerHTML = s.length;
+        syllables.innerHTML = syllable(data);
+      }
+    </script>
+
+    <script>
+      const module = {};
+      const generate_prompt = () => {
+        const prompt_title = document.getElementById("prompt_title").value;
+        const loader = document.getElementById("loadingModal");
+        const regenarate = document.getElementById("generate_btn");
+        const selectedLanguageValue =
+          document.getElementById("languageDropDown").value;
+        const wordFromValue = document.getElementById(
+          "wordCountFromDropDown"
+        ).value;
+        const wordToValue = document.getElementById(
+          "wordCountToDropDown"
+        ).value;
+        const toneValue = document.getElementById("toneDropdown").value;
+        const keyWordsValue = document.getElementById("selectedkeyWords").value;
+
+        console.log(
+          "write a blog about " +
+            prompt_title +
+            "," +
+            keyWordsValue +
+            " in " +
+            toneValue +
+            " tone in " +
+            selectedLanguageValue +
+            " within " +
+            wordFromValue +
+            " to " +
+            wordToValue +
+            " words "
+        );
+
+        if (prompt_title) {
+          // turn on loader modal
+          loader.className = "modal show";
+
+          axios
+            .post(`${api_url}/api/prompt`, {
+              prompt:
+                "write a blog about " +
+                prompt_title +
+                "," +
+                keyWordsValue +
+                "in " +
+                toneValue +
+                "tone in " +
+                selectedLanguageValue +
+                "within" +
+                wordFromValue +
+                "to " +
+                wordToValue +
+                "words ",
+            })
+            .then((r) => {
+              // turn off loader modal
+              loader.className = "modal fade";
+              regenarate.innerHTML = "Re-Generate";
+              const data = r?.data?.choices?.[0]?.message?.content;
+
+              if (data) {
+                try {
+                  module.getScore(data);
+                } catch (e) {
+                  console.log(e);
+                }
+                // document.getElementById("prompt_message").value = data;
+                quill.pasteHTML(
+                  data.slice(data.indexOf("\n")).replaceAll("\n", "<br/>")
+                );
+                document.getElementById("textTitle").value =
+                  data.split("\n")[0];
+              }
+
+              console.log(r);
+            });
+        }
+      };
+    </script>
+  </body>
+</html>
